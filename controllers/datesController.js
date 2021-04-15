@@ -3,8 +3,10 @@ const Date = require('../models/datesModel')
 exports.DateById = (req, res, next, id) => {
     const date = Date.findById(id).exec((err, date) => {
         if(err || !date){
-            
+            return res.status(400).json({message: "Could not find date"})
         }
+        req.date = date
+        next()
     })
 }
 
@@ -28,5 +30,15 @@ exports.Create = (req, res) => {
 }
 
 exports.Remove = (req, res) => {
+    const date = req.date
+    date.remove((err) => {
+        if(err) {
+            return res.status(400).json({message: "Could not delete date"})
+        }
+        res.status(200).json({message: "Date deleted successfully"})
+    })
+}
 
+exports.Update = (req, res) => {
+    const date = req.date
 }

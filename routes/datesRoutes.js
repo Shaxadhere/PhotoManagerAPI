@@ -1,5 +1,8 @@
 const express = require('express')
 const router = express.Router()
-const {List} = require('../controllers/datesController')
+const {List, Create} = require('../controllers/datesController')
 
-router.get('/', List)
+router.get('/dates', List)
+router.post('/dates/create', Create)
+
+module.exports = router

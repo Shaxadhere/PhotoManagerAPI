@@ -4,6 +4,7 @@ const bodyParser = require('body-parser')
 const morgan = require('morgan')
 const cors = require('cors')
 const dateRoutes = require('./routes/datesRoutes')
+const userRoutes = require('./routes/userRoutes')
 require('dotenv').config()
 
 
@@ -31,6 +32,7 @@ app.get('/', (req, res) => {
 })
 
 app.use('/api', dateRoutes)
+app.use('/api', userRoutes)
 
 
 //Listen to server

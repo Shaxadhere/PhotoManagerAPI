@@ -3,6 +3,7 @@ const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
 const morgan = require('morgan')
 const cors = require('cors')
+const dateRoutes = require('./routes/datesRoutes')
 require('dotenv').config()
 
 
@@ -28,6 +29,8 @@ app.use(morgan('dev'))
 app.get('/', (req, res) => {
     res.status(200).send("Hello world")
 })
+
+app.use('/api', dateRoutes)
 
 
 //Listen to server

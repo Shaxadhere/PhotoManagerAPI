@@ -1,5 +1,13 @@
 const Date = require('../models/datesModel')
 
+exports.DateById = (req, res, next, id) => {
+    const date = Date.findById(id).exec((err, date) => {
+        if(err || !date){
+            
+        }
+    })
+}
+
 exports.List = (req, res) => {
     Date.find().exec((err, dates) => {
         if (err || !dates) {
@@ -17,4 +25,8 @@ exports.Create = (req, res) => {
         }
         res.status(201).json({date})
     })
+}
+
+exports.Remove = (req, res) => {
+
 }

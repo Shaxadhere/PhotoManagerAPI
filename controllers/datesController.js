@@ -1,5 +1,10 @@
 const Date = require('../models/datesModel')
 
+
+exports.Read = (req, res) => {
+    return res.status(200).json(req.date)
+}
+
 exports.DateById = (req, res, next, id) => {
     const date = Date.findById(id).exec((err, date) => {
         if(err || !date){

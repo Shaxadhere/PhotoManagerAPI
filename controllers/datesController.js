@@ -46,4 +46,13 @@ exports.Remove = (req, res) => {
 
 exports.Update = (req, res) => {
     const date = req.date
+    date.title = req.body.title
+    date.place = req.body.place
+    date.date = req.body.date
+    date.save((err) => {
+        if(err){
+            return res.status(500).json({message: "Could not update date"})
+        }
+        res.status(200).json({message: "Date updated successfully"})
+    })
 }

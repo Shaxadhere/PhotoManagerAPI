@@ -5,6 +5,7 @@ const morgan = require('morgan')
 const cors = require('cors')
 const dateRoutes = require('./routes/datesRoutes')
 const userRoutes = require('./routes/userRoutes')
+const pictureRoutes = require('./routes/picturesRoutes')
 require('dotenv').config()
 
 
@@ -33,6 +34,7 @@ app.get('/', (req, res) => {
 
 app.use('/api', dateRoutes)
 app.use('/api', userRoutes)
+app.use('/api', pictureRoutes)
 
 
 //Listen to server

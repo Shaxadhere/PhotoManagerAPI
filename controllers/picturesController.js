@@ -29,6 +29,9 @@ exports.Create = (req, res) => {
         }
         let picture = new Picture(fields)
         if(files.picture){
+            if(files.picture.size > 1000000){
+                return res.status(400).json({message: "Image file size should be less than 1 mb"})
+            }
             picture.picture.data = fs.readFileSync(files.picture.path)
             picture.picture.contentType = files.picture.type
         }

@@ -9,3 +9,12 @@ exports.Create = (req, res) => {
          res.status(201).json({user})
     })
 }
+
+exports.List = (req, res) => {
+    User.find().exec((err,  users) => {
+        if(err){
+            return res.status(500).json({message: "Something went wrong"})
+        }
+        res.status(200).json({users})
+    })
+}

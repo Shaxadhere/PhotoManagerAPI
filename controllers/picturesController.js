@@ -20,6 +20,28 @@ exports.List = (req, res) => {
     })
 }
 
+// exports.Create = (req, res) => {
+//     let form = new formidable.IncomingForm()
+//     form.keepExtentions = true
+//     form.parse(req, (err, fields, files) => {
+//         if(err){
+//             return res.status(500).json({message: "Image could not be uploaded"})
+//         }
+//         let picture = new Picture(fields)
+//         if(files.picture){
+//             picture.picture.data = fs.readFileSync(files.picture.path)
+//             picture.picture.contentType = files.picture.type
+//         }
+//         picture.save((err, result) => {
+//             if(err){
+//                 return res.status(400).json({message: "Picture could not be added"})
+//             }
+//             res.status(200).json({Picture: result})
+//         })
+//     })
+// }
+
+
 exports.Create = (req, res) => {
     let form = new formidable.IncomingForm()
     form.keepExtentions = true
@@ -28,9 +50,9 @@ exports.Create = (req, res) => {
             return res.status(500).json({message: "Image could not be uploaded"})
         }
         let picture = new Picture(fields)
-        if(files.photo){
-            picture.photo.data = fs.readFileSync(files.photo.path)
-            picture.photo.contentType = files.photo.type
+        if(files.picture){
+            picture.picture.data = fs.readFileSync(files.picture.path)
+            picture.picture.contentType = files.picture.type
         }
         picture.save((err, result) => {
             if(err){

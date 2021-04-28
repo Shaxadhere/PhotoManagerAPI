@@ -3,20 +3,29 @@ const lodash = require('lodash')
 const fs = require('fs')
 const Picture = require('../models/picturesModel')
 
-exports.PictureById = (req, res, next) => {
-
+exports.PictureById = (req, res, next, id) => {
+    const picture = Picture.findById(id).exec((err, picture) => {
+        if(err){
+            return res.status(400).json({message: "Could not find picture"})
+        }
+        req.picture = picture
+        next()
+    })
 }
 
 exports.Read = (req, res) => {
-    
+    return res.status(200).json({Picture: req.picture})
 }
 
 exports.List = (req, res) => {
-    Picture.find().exec((err) => {
+    Picture.find()
+    .select('-picture')
+    .populate('Dates')
+    .exec((err, data) => {
         if(err || !Picture){
             return res.status(400).json({message: "Could not fetch Pictures"})
         }
-        res.status(200).json({Pictures: Picture})
+        res.status(200).json({pictures: data})
     })
 }
 

@@ -1,8 +1,10 @@
 const express = require('express')
 const router = express.Router()
-const {List, Create} = require('../controllers/picturesController')
+const {List, Create, PictureById, Read} = require('../controllers/picturesController')
 
-router.get('/pictures', List);
+router.get('/pictures/:pictureId', Read)
+router.get('/pictures', List)
 router.post('/pictures/create', Create)
 
+router.param('pictureId', PictureById)
 module.exports = router

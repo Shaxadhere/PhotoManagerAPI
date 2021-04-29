@@ -14,13 +14,14 @@ exports.PictureById = (req, res, next, id) => {
 }
 
 exports.Read = (req, res) => {
+    req.picture.picture = undefined
     return res.status(200).json({Picture: req.picture})
 }
 
 exports.List = (req, res) => {
     Picture.find()
     .select('-picture')
-    .populate('Dates')
+    .populate('fk_date')
     .exec((err, data) => {
         if(err || !Picture){
             return res.status(400).json({message: "Could not fetch Pictures"})
@@ -33,28 +34,34 @@ exports.Create = (req, res) => {
     let form = new formidable.IncomingForm()
     form.keepExtentions = true
     form.parse(req, (err, fields, files) => {
-        if(err){
-            return res.status(500).json({message: "Image could not be uploaded"})
+        if(err) {
+            return res.status(400).json({message: "Could not upload a picture"})
         }
         let picture = new Picture(fields)
         if(files.picture){
             if(files.picture.size > 1000000){
-                return res.status(400).json({message: "Image file size should be less than 1 mb"})
+                return res.status(400).json({message: "Picture size must be less than 1 mb"})
             }
             picture.picture.data = fs.readFileSync(files.picture.path)
             picture.picture.contentType = files.picture.type
         }
-        picture.save((err, result) => {
+        picture.save((err, data) => {
             if(err){
-                return res.status(400).json({message: "Picture could not be added"})
+                return res.status(400).json({message: "Could not add picture"})
             }
-            res.status(200).json({Picture: result})
+            res.status(200).json({"picture": data})
         })
     })
 }
 
 exports.Remove = (req, res) => {
-
+    let picture = req.picture
+    picture.remove((err) => {
+        if(err){
+            return res.status(400).json({message: "Could not remove picture"})
+        }
+        res.status(200).json({message: "Picture removed successfully"})
+    })
 }
 
 exports.Update = (req, res) => {

@@ -1,5 +1,5 @@
 const formidable = require('formidable')
-const lodash = require('lodash')
+const _ = require('lodash')
 const fs = require('fs')
 const Picture = require('../models/picturesModel')
 
@@ -65,5 +65,29 @@ exports.Remove = (req, res) => {
 }
 
 exports.Update = (req, res) => {
+    let form = new formidable.IncomingForm()
+    form.keepExtentions = true
+    form.parse(req, (err, fields, files) => {
+        if(err){
+            return res.status(400).json({message: "Could not upload new picture"})
+        }
+        
+        let picture = req.picture
+        picture = _.extend(picture, fields)
 
+        if(files.picture){
+            if(files.picture > 1000000){
+                return res.status(400).json({message:"Image files must be less than 1 mb in size"})
+            }
+            picture.picture.data = fs.readFileSync(files.picture.path)
+            picture.picture.contentType = files.picture.type
+        }
+
+        picture.save((err, data) => {
+            if(err){
+                return res.status(400).json({message: "Could not update picture"})
+            }
+            res.status(200).json({data})
+        })
+    })
 }

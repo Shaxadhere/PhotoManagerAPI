@@ -22,11 +22,23 @@ exports.List = (req, res) => {
     Picture.find()
     .select('-picture')
     .populate('fk_date')
-    .exec((err, data) => {
-        if(err || !Picture){
+    .exec((err, pictures) => {
+        if(err || !pictures){
             return res.status(400).json({message: "Could not fetch Pictures"})
         }
-        res.status(200).json({pictures: data})
+        res.status(200).json({pictures})
+    })
+}
+
+exports.ListForUser = (req, res) => {
+    Picture.find()
+    .select("-picture")
+    .populate('fk_date')
+    .exec((err, pictures) => {
+        if(err || !pictures){
+            return res.status(400).json({message: "Could not fetch pictures"})
+        }
+        res.staus(200).json({pictures})
     })
 }
 

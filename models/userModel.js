@@ -1,22 +1,50 @@
 const mongoose = require('mongoose')
+const crypto = require('crypto')
+const uuid = require('uuid').v1
 
-const userSchema = new mongoose.Schema({
-    name:{
+const userSchema = mongoose.Schema({
+    FullName: {
         type: String,
         required: true,
-        trim: true,
-        maxlength: 42,
-        minlength: 2
+        maxlength: 100,
+        minlength: 2,
+        trim: true
     },
-    email: {
-        type: String,
+    Email: {
+        type: String, 
         required: true,
+    },
+    ProfilePicture: {
+        data: buffer,
+        contentType: String,
+        required: false
     },
     hashed_password: {
         type: String,
-        required: true
-    }
-    
+        required: true,
+    },
+    salt: String
 })
 
-module.exports = mongoose.model('Users', userSchema)
+userSchema.virtual('password')
+.set(function(){
+    this._password = password
+    this.salt = uuid()
+    this.hashed_password = encryptPassword(password)
+})
+.get(function(){
+    return this._password
+})
+
+userSchema.methods = {
+    authenticate: function(plainText){
+        return this.encryptPassword(plainText) === this.hashed_password
+    },
+    encryptPassword: function(password){
+        return crypto.createHmac('sha1', this.salt)
+        .update(password)
+        .digest('hex')
+    }
+}
+
+module.exports = mongoose.model("User", userSchema)
